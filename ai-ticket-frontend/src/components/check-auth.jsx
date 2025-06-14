@@ -23,10 +23,12 @@ function CheckAuth({ children, protectedRoute }) {
     }
   }, [navigate, protectedRoute]);
 
+  // 🛠️ FIX: Prevent rendering children during loading or while redirecting
   if (loading) {
-    return <div>loading...</div>;
+    return <div>Loading...</div>;
   }
-  return children;
+
+  return <>{children}</>;
 }
 
 export default CheckAuth;

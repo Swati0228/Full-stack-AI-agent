@@ -12,10 +12,10 @@ export const onTicketCreated = inngest.createFunction(
     try {
       const { ticketId } = event.data;
 
-      //fetch ticket from DB
+      // fetch ticket from DB
       const ticket = await step.run("fetch-ticket", async () => {
         const ticketObject = await Ticket.findById(ticketId);
-        if (!ticket) {
+        if (!ticketObject) {
           throw new NonRetriableError("Ticket not found");
         }
         return ticketObject;
@@ -27,7 +27,7 @@ export const onTicketCreated = inngest.createFunction(
 
       const aiResponse = await analyzeTicket(ticket);
 
-      const relatedskills = await step.run("ai-processing", async () => {
+      const relatedSkills = await step.run("ai-processing", async () => {
         let skills = [];
         if (aiResponse) {
           await Ticket.findByIdAndUpdate(ticket._id, {
@@ -48,29 +48,30 @@ export const onTicketCreated = inngest.createFunction(
           role: "moderator",
           skills: {
             $elemMatch: {
-              $regex: relatedskills.join("|"),
+              $regex: relatedSkills.join("|"),
               $options: "i",
             },
           },
         });
+
         if (!user) {
-          user = await User.findOne({
-            role: "admin",
-          });
+          user = await User.findOne({ role: "admin" });
         }
+
         await Ticket.findByIdAndUpdate(ticket._id, {
           assignedTo: user?._id || null,
         });
+
         return user;
       });
 
-      await setp.run("send-email-notification", async () => {
+      await step.run("send-email-notification", async () => {
         if (moderator) {
           const finalTicket = await Ticket.findById(ticket._id);
           await sendMail(
             moderator.email,
             "Ticket Assigned",
-            `A new ticket is assigned to you ${finalTicket.title}`
+            `A new ticket is assigned to you: ${finalTicket.title}`
           );
         }
       });
