@@ -16,6 +16,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.send("Backend server is running ✅");
+});
 
 app.use("/api/auth", userRoutes);
 app.use("/api/tickets", ticketRoutes);
@@ -27,6 +30,9 @@ app.use(
     functions: [onUserSignup, onTicketCreated],
   })
 );
+
+
+
 
 mongoose
   .connect(process.env.MONGO_URI)

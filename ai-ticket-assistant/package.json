@@ -15,14 +15,14 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
-    "@inngest/agent-kit": "^0.8.0",
+    "@inngest/agent-kit": "^0.8.3",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "inngest": "^3.39.1",
+    "inngest": "^3.39.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.15.2",
+    "mongoose": "^8.16.0",
     "nodemailer": "^7.0.3"
   }
 }

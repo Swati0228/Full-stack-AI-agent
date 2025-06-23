@@ -41,7 +41,7 @@ export const createTicket = async (req, res) => {
 // Get All Tickets
 export const getTickets = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.user;// to check only autheniated user are there
     let tickets = [];
 
     if (user.role !== "user") {
